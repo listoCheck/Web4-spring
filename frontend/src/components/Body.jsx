@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setX, setY, setR } from '../store/store';
 import { ResultTable } from "./ResultTable";
@@ -12,8 +12,22 @@ export function Body() {
     const selectedX = useSelector((state) => state.body.selectedX);
     const selectedY = useSelector((state) => state.body.selectedY);
     const selectedR = useSelector((state) => state.body.selectedR);
+    const url = 'http://192.168.0.223:8080/api/checkPoint';
+    let scaleValue;
+    function checkWindowWidth() {
+        const windowWidth = window.innerWidth;
+        if (windowWidth <= 812) {
+            scaleValue = 0.5
+        } else if (windowWidth >= 813 && windowWidth <= 1063){
+            scaleValue = 0.7
+        }else{
+            scaleValue = 1
+        }
+    }
+    window.addEventListener('resize', checkWindowWidth);
+    checkWindowWidth();
 
-    const [pointer, setPointer] = useState({ cx: 200, cy: 200, visible: false, fill: "black"});
+    const [pointer, setPointer] = useState({ cx: 200 * scaleValue, cy: 200 * scaleValue, visible: false, fill: "black"});
     const [results, setResults] = useState([]);
 
     const handleXChange = (event) => {
@@ -28,31 +42,35 @@ export function Body() {
         dispatch(setR(event.target.value));
     };
 
-
     useEffect(() => {
-        const calcX = 200 + (selectedX / selectedR) * 150;
-        const calcY = 200 - (selectedY / selectedR) * 150;
+        const calcX = (200 + (selectedX / selectedR) * 150);
+        const calcY = (200 - (selectedY / selectedR) * 150);
+        console.log(calcX, calcY)
         setPointer({
             cx: calcX,
             cy: calcY,
             visible: true,
             fill: "black"
         });
-    }, [selectedX, selectedY, selectedR]);
+    }, [selectedX, selectedY, selectedR, scaleValue]);
 
     const handlePlotClick = (event) => {
         const svg = event.currentTarget;
         const rect = svg.getBoundingClientRect();
         const clickX = event.clientX - rect.left;
         const clickY = event.clientY - rect.top;
+        //console.log(clickX, clickY)
+        //console.log(scaleValue)
+        //console.log((clickX - 200 * scaleValue) / (150 * scaleValue) * selectedR, (200 * scaleValue - clickY) / (150 * scaleValue) * selectedR)
 
-        dispatch(setX(((clickX - 200) / 150 * selectedR).toFixed(2)));
-        dispatch(setY(((200 - clickY) / 150 * selectedR).toFixed(2)));
+        dispatch(setX(((clickX - 200 * scaleValue) / (150 * scaleValue) * selectedR).toFixed(2)));
+        dispatch(setY(((200 * scaleValue - clickY) / (150 * scaleValue) * selectedR).toFixed(2)));
     };
-    const sendData = (event) =>{
+
+    const sendData = (event) => {
         console.log("отправка точки...");
         event.preventDefault();
-        axios.get('http://localhost:8080/api/checkPoint', {
+        axios.get(url, {
             params: {
                 x: selectedX,
                 y: selectedY,
@@ -66,11 +84,12 @@ export function Body() {
                     let audioPlayer = document.getElementById('audioPlayer');
                     audioPlayer.play()
                     popupmessage("попал", "green");
-                }else{
+                } else {
                     let audioPlayer = document.getElementById('audioPlayer2');
                     audioPlayer.play()
-                    popupmessage("не попал" , "red");
+                    popupmessage("не попал", "red");
                 }
+
                 const calcX = 200 + (selectedX / selectedR) * 150;
                 const calcY = 200 - (selectedY / selectedR) * 150;
                 setPointer({
@@ -95,6 +114,7 @@ export function Body() {
                 popupmessage("Ошибка: " + error, "red");
             });
     }
+
     function popupmessage(message, color){
         const popup = document.getElementById('popup');
         popup.textContent = message;
@@ -157,14 +177,16 @@ export function Body() {
                         </select>
                         <p>Выбранный R: {selectedR}</p>
                     </td>
-                    <td rowSpan="6">
+
+                    <td rowSpan="4">
                         <svg
                             id="plot"
                             xmlns="http://www.w3.org/2000/svg"
                             width="400" height="400"
                             onClick={handlePlotClick}
+                            preserveAspectRatio="xMidYMid meet"
                         >
-                            <line x1="0" y1="200" x2="200" y2="200" stroke="#000720"></line>
+                            <line x1="0" y1="200" x2="400" y2="200" stroke="#000720"></line>
                             <line x1="200" y1="0" x2="200" y2="400" stroke="#000720"></line>
                             <line x1="350" y1="198" x2="350" y2="202" stroke="#000720"></line>
                             <text x="355" y="195">{selectedR}</text>
@@ -204,6 +226,7 @@ export function Body() {
                             ></circle>
                         </svg>
                     </td>
+
                 </tr>
                 <tr>
                     <td colSpan="3">

@@ -9,6 +9,7 @@ import axios from 'axios';
 import attention from "./images/reserve.mp3";
 
 function App() {
+    const url = 'http://192.168.0.223:8080/api/login';
     const [showReg, setShowReg] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -22,7 +23,7 @@ function App() {
     const handleRegister = (event) => {
         console.log("Регистрация...");
         event.preventDefault();
-        axios.get('http://192.168.x.x:8080/api/register', {
+        axios.get(url, {
             params: {
                 username: username,
                 password: password,
@@ -53,7 +54,7 @@ function App() {
     const handleLogin = (event) => {
         console.log("Вход...");
         event.preventDefault();
-        axios.get('http://192.168.0.223:8080/api/login', {
+        axios.get(url, {
             params: {
                 username: username,
                 password: password,
@@ -71,7 +72,7 @@ function App() {
             })
             .catch(error => {
                 console.error("Ошибка при входе:", error);
-               popupmessage("Ошибка входа, возможно неверный логин или пароль", "red");
+                popupmessage("Ошибка входа, возможно неверный логин или пароль", "red");
             });
 
     };

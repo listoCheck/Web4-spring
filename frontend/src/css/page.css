@@ -40,8 +40,8 @@ svg {
     border-radius: 10px;
     position: relative;
     bottom: 80px;
-    margin-left: 10%;
-
+    margin-left: 1px;
+    margin-top: -100px;
 }
 
 td {
@@ -165,7 +165,7 @@ select:focus {
 }
 
 input[type="text"] {
-    width: 100%;
+    width: 80%;
     background-color: #f2f2f2;
     cursor: text;
 }
@@ -306,6 +306,7 @@ input[type="radio"]:checked + label {
 }
 body {
     font-size: 14px;
+
 }
 @media (min-width: 1200px) {
     body {
@@ -320,11 +321,7 @@ body {
         }
     }
 }
-@media (max-width: 813px) {
-    body {
-        font-size: 10px;
-    }
-}
+
 footer {
     width: 100%;
     background-color: #101F27;
@@ -334,4 +331,129 @@ footer {
     padding: 10px 0;
     z-index: 10;
 }
+#plot {
+    transform: scale(1);
+    transform-origin: center;
+}
+
+#graphs {
+    width: 100%;
+    height: auto;
+}
+@media (max-width: 1063px) and (min-width: 813px) {
+    #plot {
+        transform: scale(0.7);
+
+    }
+    select, input[type="text"], input[type="radio"] {
+        font-size: 14px;
+
+    }
+}
+.history {
+    width: 100%;
+    margin: 10px auto;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.history th {
+    background-color: #101F27;
+    padding: 8px;
+    border: 1px solid #BBBBBB;
+    color: #BBBBBB;
+}
+
+.history td {
+    padding: 8px;
+    border: 1px solid #101F27;
+}
+
+.history tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.history tbody tr:nth-child(even) {
+    background-color: #e6e6e6;
+}
+
+.history tbody tr:hover {
+    background-color: #cce7ff;
+    cursor: pointer;
+}
+
+@media (max-width: 813px) {
+    .history {
+        width: 65%;
+        font-size: 12px;
+        margin-left: 2px;
+    }
+    .history th {
+        font-size: 12px;
+        padding: 6px;
+    }
+    .history td {
+        font-size: 12px;
+        padding: 6px;
+    }
+    .history tbody tr {
+        font-size: 12px;
+    }
+    #mainTable {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    #mainTableContainer {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+    #mainTable thead,
+    #mainTable tbody,
+    #mainTable tfoot,
+    #mainTable tr,
+    #mainTable td {
+        margin: 0;
+        padding: 0;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    #plot {
+        transform: scale(0.5);
+        margin-left: -23%;
+    }
+    select, input[type="text"], input[type="radio"] {
+        font-size: 14px;
+
+    }
+
+    #checkButton, #clearButton {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+    .logoutButton {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+    .submit1 {
+        font-size: 14px;
+        padding: 8px 16px;
+        margin-left: 500px;
+        margin-bottom: 70px;
+    }
+
+    h2 {
+        font-size: 14px;
+    }
+    body {
+        font-size: 10px;
+    }
+}
+
 
